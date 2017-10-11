@@ -1,11 +1,11 @@
-FROM resin/raspberry-pi-alpine:3.6
+FROM hypriot/rpi-alpine-scratch:latest
 
 MAINTAINER Gorofad "gorofad@posteo.de"
 
 RUN apk update \
   && apk upgrade \
   && apk add unbound apk-cron \
-  && rm -rf /var/cache/apk/* 
+  && rm -rf /var/cache/apk/*
 
 COPY unbound.conf /etc/unbound/unbound.conf
 
