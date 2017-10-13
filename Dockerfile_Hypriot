@@ -7,9 +7,12 @@ RUN apk update \
   && apk add unbound apk-cron \
   && rm -rf /var/cache/apk/*
 
-COPY unbound.conf /etc/unbound/unbound.conf
+RUN addgroup _unbound && \
+    adduser -S -H -G _unbound _unbound && \
+    mkdir -p -m 700 /data/unbound && \
+    chown _unbound:_unbound /data/unbound
 
-COPY root.hints /etc/unbound/
+COPY unbound.conf root.hints /data/unbound/
 
 COPY unbound_updates.sh /etc/cron.weekly
 
@@ -19,4 +22,4 @@ EXPOSE 53/udp
 
 ENTRYPOINT ["docker-entrypoint.sh"]
 
-CMD ["unbound"]
+CMD ["unbound", "-c /data/unbound/unbound.conf"]
