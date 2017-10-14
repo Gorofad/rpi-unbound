@@ -1,0 +1,5 @@
+server:
+    logfile: "/data/log/unbound.log"
+    verbosity: 3
+    log-queries: yes
+    val-log-level: 2

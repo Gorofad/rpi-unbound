@@ -2,17 +2,21 @@ FROM resin/raspberry-pi-alpine:3.6
 
 MAINTAINER Gorofad "gorofad@posteo.de"
 
-RUN apk add --update unbound apk-cron; rm -rf /var/cache/apk/* ;
+RUN apk update && \
+    apk upgrade && \
+    apk add unbound && \
+    rm -rf /var/cache/apk/*
 
-COPY unbound.conf /etc/unbound/unbound.conf
-COPY conf/* /etc/unbound/unbound.conf.d/
-COPY root.hints /etc/unbound/
+COPY unbound.conf root.hints /etc/unbound/
 
-RUN unbound-checkconf
+COPY docker-entrypoint.sh /usr/local/bin/
 
-COPY unbound_updates.sh /etc/cron.weekly
-
-RUN unbound-anchor -v
+RUN chmod a+x /usr/local/bin/docker-entrypoint.sh && \
+    unbound-anchor -v && \
+    chown -R unbound:unbound /usr/share/dnssec-root/
 
 EXPOSE 53/udp
+
+ENTRYPOINT ["docker-entrypoint.sh"]
+
 CMD ["unbound"]
