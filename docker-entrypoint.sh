@@ -2,6 +2,7 @@
 
 set -ex
 
+<<<<<<< HEAD
 chown -R _unbound:_unbound /data/unbound/
 
 echo ">> Load Anchor file"
@@ -13,3 +14,10 @@ unbound-checkconf /data/unbound/unbound.conf
 
 echo ">> Start Unbound"
 unbound -c /data/unbound/unbound.conf
+=======
+echo "Check Unbound config files"
+unbound-checkconf
+
+echo "Start Unbound Server"
+unbound
+>>>>>>> develop
